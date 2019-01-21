@@ -37,12 +37,14 @@ namespace ClickHouseBenchmarks
             sw.Start();
             //int parseJson = ClickhouseQueryExecutor.ExecuteQuery<List<ListStringClickhouseResult>>(query).Count;
            // Log("ParseJson", parseJson);
-            int parseTSV = ParseTSV(query);
-            Log("ParseTSV", parseTSV);
+           // int parseTSV = ParseTSV(query);
+            //Log("ParseTSV", parseTSV);
             //int parseRowBinary = ParseRowBinary(query);
             //Log("ParseBin", parseRowBinary);
-            int readAll = ReadAll(query);
+            int readAll = ReadAll(query,"localhost");
             Log("ReadAll", readAll);
+            int readAl1l = ReadAll(query, "10.8.42.1");
+            Log("ReadAll1", readAl1l);
 
         }
         private static ClickHouseConnection GetConnection()
@@ -52,7 +54,7 @@ namespace ClickHouseBenchmarks
             cnn.Open();
             return cnn;
         }
-        public static int ReadAll(string query)
+        public static int ReadAll(string query, string host)
         {
             using (var cnn = GetConnection())
             {
