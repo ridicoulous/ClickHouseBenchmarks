@@ -21,11 +21,11 @@ namespace ClickHouseBenchmarks
         static void Main(string[] args)
         {
             Console.WriteLine("Enter connection string ");
-            string ip = Console.ReadLine();
-            host = ip;
+            //string ip = Console.ReadLine();
+            //host = ip;
            // int buffer = int.Parse(Console.ReadLine());
             //_bufferSize = buffer;
-            for (int i = 4096; i <= 2059072; i *= 2)
+            for (int i = 128; i <= 3059072; i *= 2)
             {
                 string query = $"SELECT number as result FROM system.numbers LIMIT {i}";
                 Test(query);
@@ -42,9 +42,9 @@ namespace ClickHouseBenchmarks
             //int parseRowBinary = ParseRowBinary(query);
             //Log("ParseBin", parseRowBinary);
             int readAll = ReadAll(query,"localhost");
-            Log("ReadAll", readAll);
+            Log(host, readAll);
             int readAl1l = ReadAll(query, "10.8.42.1");
-            Log("ReadAll1", readAl1l);
+            Log(host, readAl1l);
 
         }
         private static ClickHouseConnection GetConnection()
@@ -54,10 +54,11 @@ namespace ClickHouseBenchmarks
             cnn.Open();
             return cnn;
         }
-        public static int ReadAll(string query, string host)
+        public static int ReadAll(string query, string hostiq)
         {
             using (var cnn = GetConnection())
             {
+                host = hostiq;
                 var cmd = cnn.CreateCommand(query);
                 var list = new List<List<object>>();
 
