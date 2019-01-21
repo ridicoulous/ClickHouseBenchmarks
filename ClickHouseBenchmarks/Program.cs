@@ -7,32 +7,40 @@ using System.IO;
 namespace ClickHouseBenchmarks
 {
     class Program
-    {
-        static string clickhouseConnectionString = "Compress=True;CheckCompressedHash=False;Compressor=lz4;Host=house.click;Port=9000;User=admin;Password=admin;SocketTimeout=600000;Database=database;";
+    {        
+        static string clickhouseConnectionString = $"Compress=True;CheckCompressedHash=False;Compressor=lz4;BufferSize={_bufferSize};Host={host};Port=9000;User=default;Password=;SocketTimeout=600000;Database=default;";
+        static string host;
+        //static string clickhouseConnectionString = "Compress=True;CheckCompressedHash=False;Compressor=lz4;Host=localhost;Port=9000;User=default;Password=;SocketTimeout=600000;Database=default;";
         static Stopwatch sw = new Stopwatch();
         static void Log(string message, int count)
         {
             Console.WriteLine($"{message} getted {count} records by \t\t {sw.ElapsedMilliseconds} ms.");
             sw.Restart();
         }
+        private static int _bufferSize = 8192;
         static void Main(string[] args)
         {
-            for (int i = 1; i <= 131072; i *= 2)
+            Console.WriteLine("Enter connection string ");
+            string ip = Console.ReadLine();
+            host = ip;
+           // int buffer = int.Parse(Console.ReadLine());
+            //_bufferSize = buffer;
+            for (int i = 4096; i <= 2059072; i *= 2)
             {
                 string query = $"SELECT number as result FROM system.numbers LIMIT {i}";
                 Test(query);
-            }
+            }           
         }
 
         public static void Test(string query)
         {
             sw.Start();
-            int parseJson = ClickhouseQueryExecutor.ExecuteQuery<List<ListStringClickhouseResult>>(query).Count;
-            Log("ParseJson", parseJson);
+            //int parseJson = ClickhouseQueryExecutor.ExecuteQuery<List<ListStringClickhouseResult>>(query).Count;
+           // Log("ParseJson", parseJson);
             int parseTSV = ParseTSV(query);
             Log("ParseTSV", parseTSV);
-            int parseRowBinary = ParseRowBinary(query);
-            Log("ParseBin", parseRowBinary);
+            //int parseRowBinary = ParseRowBinary(query);
+            //Log("ParseBin", parseRowBinary);
             int readAll = ReadAll(query);
             Log("ReadAll", readAll);
 

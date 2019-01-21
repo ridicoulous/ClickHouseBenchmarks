@@ -24,7 +24,8 @@ namespace ClickHouseBenchmarks
     }
     public static class ClickhouseQueryExecutor
     {
-        private const string host = "http://house.click:8123/";
+       private const string host = "http://35.204.154.200:8123/";
+        //private const string host = "http://localhost:8123/";
 
         private static readonly GzipWebClient _webClient = new GzipWebClient();
         public static T ExecuteQuery<T>(string query) where T : class
